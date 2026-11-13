@@ -1,0 +1,18 @@
+# Виртуальное окружение
+venv/
+.venv/
+env/
+
+# Переменные окружения и секреты
+.env
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+
+# База данных SQLite (для Django/Flask)
+db.sqlite3
+
+# Настройки редакторов кода
+.vscode/
+.idea/
