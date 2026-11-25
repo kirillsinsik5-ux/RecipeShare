@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Профиль — RecipeShare{% endblock %}
+{% block content %}
+<section class="panel" aria-labelledby="page-title">
+  <h1 id="page-title">Личный кабинет</h1>
+  <dl>
+    <dt>Email</dt><dd>{{ user.email }}</dd>
+    <dt>Имя</dt><dd>{{ user.full_name }}</dd>
+    <dt>Роль</dt><dd><span class="badge">{{ user.get_role_display }}</span></dd>
+  </dl>
+  <a class="btn btn-outline" href="{% url 'accounts:profile_edit' user.id %}">Редактировать профиль</a>
+</section>
+{% endblock %}

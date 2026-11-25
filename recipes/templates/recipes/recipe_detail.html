@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}{{ recipe.title }} — RecipeShare{% endblock %}
+{% block content %}
+<article aria-labelledby="page-title">
+  <p><a href="{% url 'core:index' %}">← Ко всем рецептам</a></p>
+  <h1 id="page-title">{{ recipe.title }}</h1>
+  <p class="card-meta">
+    <span class="badge">{{ recipe.category.name }}</span>
+    {{ recipe.cooking_time_min }} мин · {{ recipe.servings }} порц. · автор: {{ recipe.author.full_name }}
+    {% if recipe.status != 'published' %} · <strong>{{ recipe.get_status_display }}</strong>{% endif %}
+  </p>
+  {% if recipe.description %}<p>{{ recipe.description }}</p>{% endif %}
+
+  <div class="recipe-layout">
+    <aside class="panel" aria-labelledby="ingredients-title">
+      <h2 id="ingredients-title">Ингредиенты</h2>
+      <ul class="ingredient-list">
+        {% for item in items %}
+          <li>{{ item.ingredient.name }} — {{ item.quantity|floatformat:"-2" }} {{ item.unit }}</li>
+        {% empty %}
+          <li>Состав не указан</li>
+        {% endfor %}
+      </ul>
+    </aside>
+    <section class="panel" aria-labelledby="steps-title">
+      <h2 id="steps-title">Приготовление</h2>
+      {{ recipe.instructions|linebreaks }}
+    </section>
+  </div>
+</article>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Вход — RecipeShare{% endblock %}
+{% block content %}
+<section class="form-card" aria-labelledby="page-title">
+  <h1 id="page-title">Вход</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}">
+    {% include "includes/form_fields.html" %}
+    <button type="submit" class="btn">Войти</button>
+  </form>
+  <p><a href="{% url 'accounts:forgot_password' %}">Забыли пароль?</a></p>
+  <p>Нет аккаунта? <a href="{% url 'accounts:register' %}">Регистрация</a></p>
+</section>
+{% endblock %}

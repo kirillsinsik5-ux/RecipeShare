@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}RecipeShare — сообщество рецептов{% endblock %}
+{% block content %}
+<section aria-labelledby="page-title">
+  <h1 id="page-title">Рецепты сообщества</h1>
+
+  <form method="get" class="search-form" role="search" aria-label="Поиск рецептов">
+    <div class="form-field">
+      <label for="q">Название рецепта</label>
+      <input class="form-control" type="search" id="q" name="q" value="{{ query }}" maxlength="100">
+    </div>
+    <div class="form-field">
+      <label for="category">Категория</label>
+      <select class="form-control" id="category" name="category">
+        <option value="">Все категории</option>
+        {% for c in categories %}
+          <option value="{{ c.id }}"{% if category_id == c.id|stringformat:"d" %} selected{% endif %}>{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-field">
+      <button type="submit" class="btn">Найти</button>
+    </div>
+  </form>
+
+  {% if page.object_list %}
+    <ul class="card-grid">
+      {% for recipe in page.object_list %}
+      <li>
+        <article class="card">
+          <span class="badge">{{ recipe.category.name }}</span>
+          <h2><a href="{% url 'recipes:detail' recipe.id %}">{{ recipe.title }}</a></h2>
+          <p class="card-meta">{{ recipe.cooking_time_min }} мин · {{ recipe.servings }} порц. · автор: {{ recipe.author.full_name }}</p>
+          {% if recipe.description %}<p>{{ recipe.description|truncatechars:110 }}</p>{% endif %}
+        </article>
+      </li>
+      {% endfor %}
+    </ul>
+
+    {% if page.has_other_pages %}
+    <nav class="pagination" aria-label="Страницы каталога">
+      {% if page.has_previous %}
+        <a class="btn btn-outline btn-sm" href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ page.previous_page_number }}">Назад</a>
+      {% endif %}
+      <span>Страница {{ page.number }} из {{ page.paginator.num_pages }}</span>
+      {% if page.has_next %}
+        <a class="btn btn-outline btn-sm" href="?{% if querystring %}{{ querystring }}&amp;{% endif %}page={{ page.next_page_number }}">Вперёд</a>
+      {% endif %}
+    </nav>
+    {% endif %}
+  {% else %}
+    <p>Рецепты не найдены. Попробуйте изменить запрос.</p>
+  {% endif %}
+</section>
+{% endblock %}

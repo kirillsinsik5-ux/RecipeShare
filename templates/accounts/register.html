@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Регистрация — RecipeShare{% endblock %}
+{% block content %}
+<section class="form-card" aria-labelledby="page-title">
+  <h1 id="page-title">Регистрация</h1>
+  <form method="post" id="register-form" novalidate>
+    {% csrf_token %}
+    {% include "includes/form_fields.html" %}
+    <button type="submit" class="btn">Зарегистрироваться</button>
+  </form>
+  <p>Уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a></p>
+</section>
+<script src="{% static 'js/register.js' %}"></script>
+{% endblock %}

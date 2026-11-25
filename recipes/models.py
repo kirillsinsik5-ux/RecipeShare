@@ -1,5 +1,3 @@
-# Create your models here.
-# models.py
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
@@ -25,6 +23,10 @@ class User(AbstractUser):
 
     class Meta:
         db_table = 'users'
+
+    @property
+    def is_moderator(self):
+        return self.role == self.ROLE_MODERATOR
 
 
 class Category(models.Model):

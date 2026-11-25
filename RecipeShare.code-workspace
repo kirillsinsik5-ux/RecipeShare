@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "RecipeShare",
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.terminal.useEnvFile": true
+	}
+}

@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="RecipeShare — сообщество кулинарных рецептов">
+  <title>{% block title %}RecipeShare{% endblock %}</title>
+  <link rel="icon" href="{% static 'img/logo.svg' %}" type="image/svg+xml">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Перейти к содержимому</a>
+
+  <header class="site-header">
+    <div class="container header-nav">
+      <a class="brand" href="{% url 'core:index' %}">
+        <img src="{% static 'img/logo.svg' %}" alt="Логотип RecipeShare" width="32" height="32">
+        RecipeShare
+      </a>
+      <nav aria-label="Основная навигация">
+        <ul class="nav-list">
+          {% with current=request.resolver_match.view_name %}
+          <li><a href="{% url 'core:index' %}"{% if current == 'core:index' %} aria-current="page"{% endif %}>Рецепты</a></li>
+          {% if user.is_authenticated %}
+            <li><a href="{% url 'accounts:profile' %}"{% if current == 'accounts:profile' %} aria-current="page"{% endif %}>Личный кабинет</a></li>
+            {% if user.role == 'moderator' %}
+              <li><a class="btn btn-danger btn-sm" href="{% url 'accounts:moderation' %}">Панель модератора</a></li>
+            {% endif %}
+            <li>
+              <form method="post" action="{% url 'accounts:logout' %}" class="inline">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline btn-sm">Выйти</button>
+              </form>
+            </li>
+          {% else %}
+            <li><a href="{% url 'accounts:login' %}"{% if current == 'accounts:login' %} aria-current="page"{% endif %}>Вход</a></li>
+            <li><a class="btn btn-sm" href="{% url 'accounts:register' %}">Регистрация</a></li>
+          {% endif %}
+          {% endwith %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="container">
+    {% if messages %}
+      <ul class="messages" role="status">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© {% now "Y" %} RecipeShare — сообщество рецептов.</p>
+    </div>
+  </footer>
+</body>
+</html>

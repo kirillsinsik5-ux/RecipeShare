@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Панель модератора — RecipeShare{% endblock %}
+{% block content %}
+<section aria-labelledby="page-title">
+  <h1 id="page-title">Пользователи</h1>
+  <div class="table-wrap">
+    <table>
+      <caption class="sr-only">Список пользователей системы</caption>
+      <thead>
+        <tr><th scope="col">ID</th><th scope="col">Email</th><th scope="col">Имя</th><th scope="col">Роль</th><th scope="col">Активен</th><th scope="col">Действие</th></tr>
+      </thead>
+      <tbody>
+      {% for u in users %}
+        <tr>
+          <td>{{ u.id }}</td><td>{{ u.email }}</td><td>{{ u.full_name }}</td>
+          <td>{{ u.get_role_display }}</td><td>{{ u.is_active|yesno:"да,нет" }}</td>
+          <td>
+            {% if u.id != user.id and not u.is_superuser %}
+            <form method="post" action="{% url 'accounts:toggle_active' u.id %}" class="inline">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-sm {% if u.is_active %}btn-danger{% else %}btn-outline{% endif %}">
+                {% if u.is_active %}Заблокировать{% else %}Разблокировать{% endif %}
+              </button>
+            </form>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
